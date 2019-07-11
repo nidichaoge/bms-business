@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.mouse.bms.business.dal.dao.BusinessDAO">
+
+    <sql id="table">
+        bms_business
+    </sql>
+
+    <sql id="column">
+        id, store_id, nick_name, icon, created_at, updated_at, deleted_at, status
+    </sql>
+
+    <resultMap id="businessDO" type="com.mouse.bms.business.dal.dataobject.BusinessDO">
+        <result column="id" property="id"/>
+        <result column="store_id" property="storeId"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="icon" property="icon"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted_at" property="deletedAt"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.mouse.bms.business.dal.dataobject.BusinessDO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        <include refid="table"/>
+        (
+        <if test="id > 0">
+            id,
+        </if>
+        store_id, nick_name, icon,
+        <if test="status != null">
+            status,
+        </if>
+        created_at
+        ) VALUES (
+        <if test="id > 0">
+            #{id},
+        </if>
+        #{storeId},
+        #{nickName},
+        #{icon},
+        <if test="status != null">
+            #{status},
+        </if>
+        #{createdAt}
+        );
+    </insert>
+
+</mapper>

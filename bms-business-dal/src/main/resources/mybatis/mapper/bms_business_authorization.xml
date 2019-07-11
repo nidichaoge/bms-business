@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.mouse.bms.business.dal.dao.BusinessAuthorizationDAO">
+
+    <sql id="table">
+        bms_business_authorization
+    </sql>
+
+    <sql id="column">
+        id, business_id, role, authority, created_at, updated_at, deleted_at
+    </sql>
+
+    <resultMap id="businessAuthorizationDO" type="com.mouse.bms.business.dal.dataobject.BusinessAuthorizationDO">
+        <result column="id" property="id"/>
+        <result column="business_id" property="businessId"/>
+        <result column="role" property="role"/>
+        <result column="authority" property="authority"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted_at" property="deletedAt"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.mouse.bms.business.dal.dataobject.BusinessAuthorizationDO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        <include refid="table"/>
+        (
+        <if test="id > 0">
+            id,
+        </if>
+        business_id, role, authority, created_at
+        ) VALUES (
+        <if test="id > 0">
+            #{id},
+        </if>
+        #{businessId},
+        #{role},
+        #{authority},
+        #{createdAt}
+        );
+    </insert>
+
+    <select id="get" resultMap="businessAuthorizationDO">
+        SELECT
+        <include refid="column"/>
+        FROM
+        <include refid="table"/>
+        WHERE business_id = #{businessId}
+        AND deleted_at = '1970-01-01 08:00:00'
+        LIMIT 1;
+    </select>
+</mapper>

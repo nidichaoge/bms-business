@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.mouse.bms.business.dal.dao.BusinessAuthenticationDAO">
+
+    <sql id="table">
+        bms_business_authentication
+    </sql>
+
+    <sql id="column">
+        id, business_id, identity_type, identifier, credential, created_at, updated_at, deleted_at, status
+    </sql>
+
+    <resultMap id="businessAuthenticationDO" type="com.mouse.bms.business.dal.dataobject.BusinessAuthenticationDO">
+        <result column="id" property="id"/>
+        <result column="business_id" property="businessId"/>
+        <result column="identity_type" property="identityType"/>
+        <result column="identifier" property="identifier"/>
+        <result column="credential" property="credential"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted_at" property="deletedAt"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.mouse.bms.business.dal.dataobject.BusinessAuthenticationDO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        <include refid="table"/>
+        (
+        <if test="id > 0">
+            id,
+        </if>
+        business_id, identity_type, identifier, credential,
+        <if test="status != null">
+            status,
+        </if>
+        created_at
+        ) VALUES (
+        <if test="id > 0">
+            #{id},
+        </if>
+        #{businessId},
+        #{identityType},
+        #{identifier},
+        #{credential},
+        <if test="status != null">
+            #{status},
+        </if>
+        #{createdAt}
+        );
+    </insert>
+
+    <select id="get" resultMap="businessAuthenticationDO">
+        SELECT
+        <include refid="column"/>
+        FROM
+        <include refid="table"/>
+        WHERE identifier = #{identifier}
+        AND identity_type = #{identityType}
+        AND deleted_at = '1970-01-01 08:00:00'
+        LIMIT 1;
+    </select>
+</mapper>
